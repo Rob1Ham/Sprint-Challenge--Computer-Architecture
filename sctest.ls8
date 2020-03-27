@@ -6,49 +6,84 @@
 # 5
 
 10000010 # LDI R0,10
+#register 0
 00000000
+#value 10
 00001010
 10000010 # LDI R1,20
+#register 1
 00000001
+#value 20
 00010100
 10000010 # LDI R2,TEST1
+#register 2
 00000010
+#value 19
 00010011
 10100111 # CMP R0,R1
+#reg 0
 00000000
+#reg 1
 00000001
+#values are not equal. reg 0 < reg 1
+#so the flag is 0b00000100
 01010101 # JEQ R2
+#FALSE, so skip past reg 2
 00000010
+#register 3 has value of 1
 10000010 # LDI R3,1
+#reg 3
 00000011
+#value 1
 00000001
 01000111 # PRN R3
+#print 3rd register of value 1
 00000011
 # TEST1 (address 19):
+#1 prints!
 10000010 # LDI R2,TEST2
+#reg 2
 00000010
+#value 32
 00100000
 10100111 # CMP R0,R1
+#register 0 is now greater than 1
+#so flag is 0b00000010
 00000000
 00000001
 01010110 # JNE R2
+#the values are NOT equal now
+#so we should look at the value of register 2
 00000010
+#the value is 32... so we should jump to that as the program counter
+#so we skip the print statement of register 3 below!
 10000010 # LDI R3,2
 00000011
 00000010
 01000111 # PRN R3
 00000011
 # TEST2 (address 32):
+#jumped to here from the JNE call above
 10000010 # LDI R1,10
+#setting the value of 10 in register 1
+#reg 1
 00000001
+#value 10
 00001010
 10000010 # LDI R2,TEST3
+#register 2
 00000010
+#value of 48
 00110000
 10100111 # CMP R0,R1
+#register 0 is 10
 00000000
+#register 1 is 10
 00000001
 01010101 # JEQ R2
+#Register 1 = Register 0 (both 10)
+#so we will jump to the program counter address sotred in Reg 2
+#(that is line 48)
 00000010
 10000010 # LDI R3,3
 00000011
@@ -56,31 +91,57 @@
 01000111 # PRN R3
 00000011
 # TEST3 (address 48):
+#jumped to here from the JEQ call above.
 10000010 # LDI R2,TEST4
+#register 2
 00000010
+#value of 61
 00111101
 10100111 # CMP R0,R1
+#register 1 and 0 are equal to each other (both 10)
+#so flag is set to 0b00000001
 00000000
 00000001
 01010110 # JNE R2
+#JNE is FALSE sicne the values ARE equal
+#so we skip register 2 pointer
 00000010
+#register 3 is set to value 4
 10000010 # LDI R3,4
+#register 3
 00000011
+#value 4
 00000100
 01000111 # PRN R3
+#print value 4
+#this is the second value printed according to spec looking good!
 00000011
 # TEST4 (address 61):
+#register 3 is set to 5
 10000010 # LDI R3,5
+#register 3
 00000011
+#value 5
 00000101
+#print register 3, which we just set to 5!
 01000111 # PRN R3
+#register 3 prints 5!
+#this should be or last output in this spec to hit the spec!
 00000011
+#set register 2 to value 73
 10000010 # LDI R2,TEST5
+#register 2
 00000010
+#value 73
 01001001
 01010100 # JMP R2
+#jump to the value in register 2
+#which we just set to line 73!
 00000010
 01000111 # PRN R3
 00000011
 # TEST5 (address 73):
+#commanded to arrive here from above.
+#program halts!
+#verified output should be 1, 4, 5 then halted!
 00000001 # HLT
